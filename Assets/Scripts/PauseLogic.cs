@@ -8,11 +8,16 @@ public class PauseLogic : MonoBehaviour
 {
     [SerializeField] private GameObject pauseUI;
     public static bool gameIsPaused = false;
-
+    
     public void Pause()
     {
-        Time.timeScale = 0;
-        pauseUI.SetActive(true);
+        var gameLogic = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameLogic>();
+        
+        if (!gameLogic.GameIsOver)
+        {
+            Time.timeScale = 0;
+            pauseUI.SetActive(true);
+        }
     }
 
     public void Continue()

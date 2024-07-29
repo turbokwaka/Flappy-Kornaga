@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameLogicScript : MonoBehaviour
+public class GameLogic : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject playerObject;
@@ -16,15 +16,13 @@ public class GameLogicScript : MonoBehaviour
     private int _playerHighestScore;
     private int _playerCoins;
 
-    internal bool IsGameOver = false;
+    public bool GameIsOver = false;
 
     private PlayerLogic _playerLogic;
-    private AudioManagerScript _audioManagerScript;
 
     void Start()
     {
         _playerLogic = playerObject.GetComponent<PlayerLogic>();
-        _audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
         
         _playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
         _playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
@@ -35,7 +33,7 @@ public class GameLogicScript : MonoBehaviour
     
     public void AddScore(int amount)
     {
-        if (!IsGameOver)
+        if (!GameIsOver)
         {
             _playerScore += amount;
             scoreText.text = _playerScore.ToString();
@@ -44,7 +42,7 @@ public class GameLogicScript : MonoBehaviour
 
     public void AddCoins(int amount)
     {
-        if (!IsGameOver)
+        if (!GameIsOver)
         {
             _playerCoins += amount;
             coinsText.text = _playerCoins.ToString();
@@ -54,11 +52,10 @@ public class GameLogicScript : MonoBehaviour
 
     public void GameOver()
     {
-        
-        IsGameOver = true;
+        GameIsOver = true;
         gameOverScreen.SetActive(true);
         
-        _audioManagerScript.PlaySFX(_audioManagerScript.deathSound);
+        AudioManager.instance.PlaySFX(AudioManager.instance.deathSound);
 
         UpdateHighestScore();
     }

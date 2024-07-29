@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AudioManagerScript : MonoBehaviour
+public class AudioManager : MonoBehaviour
 {
     [Header("-------Audio Sources-------")]
     [SerializeField] private AudioSource backgroundMusic;
@@ -13,13 +13,13 @@ public class AudioManagerScript : MonoBehaviour
     public AudioClip coinSound;
     public AudioClip deathSound;
 
-    private static AudioManagerScript _instance;
+    public static AudioManager instance = null;
 
     void Awake()
     {
-        if (_instance == null)
+        if (instance == null)
         {
-            _instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -37,5 +37,15 @@ public class AudioManagerScript : MonoBehaviour
     public void PlaySFX(AudioClip audioClip)
     {
         SFX.PlayOneShot(audioClip);
+    }
+
+    public void MuteMusic()
+    {
+        backgroundMusic.mute = !backgroundMusic.mute;
+    }
+
+    public void MuteSfx()
+    {
+        SFX.mute = !SFX.mute;
     }
 }

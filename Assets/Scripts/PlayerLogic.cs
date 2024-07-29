@@ -1,32 +1,35 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerLogic : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D physics;
-    [SerializeField] private float jumpStrength = 10f;
-    [SerializeField] private float gravityScale = 2f;
+    [SerializeField] private float jumpStrength;
+    [SerializeField] private float gravityScale;
 
-    private AudioManagerScript _audioManagerScript;
-    private GameLogicScript _gameLogic;
+    private GameLogic _gameLogic;
+    private bool _canFall = false;
+
     void Start()
     {
-        physics.gravityScale = gravityScale;
-        _gameLogic = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameLogicScript>();
-        _audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
+        _gameLogic = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameLogic>();
+
+        // Встановлення початкової гравітації на 0
+        physics.gravityScale = 0;
+        
+        // Запуск корутини для затримки перед початком падіння
+        StartCoroutine(StartFalling());
     }
 
     void Update()
     {
-        if (!_gameLogic.IsGameOver)
+        if (!_gameLogic.GameIsOver && _canFall)
         {
             // Перевірка натискання кнопки "Jump" для ПК або торкання для мобільних пристроїв
             if (Input.GetButtonDown("Jump") || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
                 physics.velocity = new Vector2(physics.velocity.x, jumpStrength);
-                _audioManagerScript.PlaySFX(_audioManagerScript.jumpSound);
+                AudioManager.instance.PlaySFX(AudioManager.instance.jumpSound);
             }
 
             // Перевірка виходу за межі екрану
@@ -35,6 +38,16 @@ public class PlayerLogic : MonoBehaviour
                 _gameLogic.GameOver();
             }
         }
+    }
+
+    private IEnumerator StartFalling()
+    {
+        // Затримка на 1 секунду
+        yield return new WaitForSeconds(1.0f);
+        
+        // Увімкнення гравітації
+        physics.gravityScale = gravityScale;
+        _canFall = true;
     }
 
     public void OnCollisionEnter2D(Collision2D other)
@@ -49,7 +62,7 @@ public class PlayerLogic : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Coin"))
         {
-            _audioManagerScript.PlaySFX(_audioManagerScript.coinSound);
+            AudioManager.instance.PlaySFX(AudioManager.instance.coinSound);
             _gameLogic.AddCoins(1);
             Destroy(other.gameObject);
         }
