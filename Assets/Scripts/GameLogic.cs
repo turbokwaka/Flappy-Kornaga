@@ -37,12 +37,12 @@ public class GameLogic : MonoBehaviour
     
     void OnEnable()
     {
-        PlayerLogic.OnDeath += HandlePlayerDeath;
+        PlayerCollision.OnDeath += HandlePlayerDeath;
     }
 
     void OnDisable()
     {
-        PlayerLogic.OnDeath -= HandlePlayerDeath;
+        PlayerCollision.OnDeath -= HandlePlayerDeath;
     }
 
     void HandlePlayerDeath()

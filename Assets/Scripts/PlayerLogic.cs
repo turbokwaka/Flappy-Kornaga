@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class PlayerLogic : MonoBehaviour
 {
+    // --- Gravity fields ---
     [SerializeField] private Rigidbody2D physics;
     [SerializeField] private float jumpStrength;
     [SerializeField] private float gravityScale;
-
-    // OnDeath EVENT
-    public delegate void DeathEventHandler();
-    public static event DeathEventHandler OnDeath;
     
-    // OnCoinPickup EVENT
-    public delegate void CoinPickupEventHandler();
-    public static event CoinPickupEventHandler OnCoinPickup;
-    // OnScoreAdd EVENT
-    public delegate void ScoreAddEventHandler();
-    public static event ScoreAddEventHandler OnScoreAddEvent;
+    // --- OnFly EVENT ---
+    public delegate void FlyEventHandler();
+    public static event FlyEventHandler OnFly;
     
+    // --- private fields ---
     private GameLogic _gameLogic;
     private bool _canFall = false;
-    private bool _isDead = false;
+    internal bool _isDead = false;
 
     void Start()
     {
@@ -42,24 +37,6 @@ public class PlayerLogic : MonoBehaviour
                 physics.velocity = new Vector2(physics.velocity.x, jumpStrength);
                 AudioManager.instance.PlaySFX(AudioManager.instance.jumpSound);
             }
-
-            if (transform.position.y > 7 || transform.position.y < -7)
-            {
-                if (_isDead == false)
-                {
-                    Die();
-                }
-            }
-        }
-    }
-    
-    void Die()
-    {
-        if (OnDeath != null)
-        {
-            OnDeath();
-            AudioManager.instance.PlaySFX(AudioManager.instance.deathSound);
-            _isDead = true;
         }
     }
 
@@ -69,31 +46,5 @@ public class PlayerLogic : MonoBehaviour
         
         physics.gravityScale = gravityScale;
         _canFall = true;
-    }
-
-    public void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Obstacle"))
-        {
-            Die();
-        }
-    }
-
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Coin"))
-        {
-            AudioManager.instance.PlaySFX(AudioManager.instance.coinSound);
-            _gameLogic.AddCoins(1);
-            Destroy(other.gameObject);
-        }
-    }
-
-    public void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("PipeTrigger"))
-        {
-            _gameLogic.AddScore(1);
-        }
     }
 }
