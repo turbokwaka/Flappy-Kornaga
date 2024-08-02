@@ -10,12 +10,12 @@ public class PlayerLogic : MonoBehaviour
     [SerializeField] private float gravityScale;
     
     // --- OnFly EVENT ---
-    public delegate void FlyEventHandler();
-    public static event FlyEventHandler OnFly;
+    public delegate void FallEventHandler();
+    public static event FallEventHandler OnFall;
     
     // --- private fields ---
     private GameLogic _gameLogic;
-    private bool _canFall = false;
+    internal bool _isInputEnabled = false;
     internal bool _isDead = false;
 
     void Start()
@@ -30,7 +30,7 @@ public class PlayerLogic : MonoBehaviour
     void Update()
     {
         // INPUT
-        if (!_gameLogic.GameIsOver && _canFall)
+        if (_isInputEnabled)
         {
             if (Input.GetButtonDown("Jump") || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
@@ -43,8 +43,10 @@ public class PlayerLogic : MonoBehaviour
     private IEnumerator StartFalling()
     {
         yield return new WaitForSeconds(1.0f);
-        
+
+        OnFall?.Invoke();
+
         physics.gravityScale = gravityScale;
-        _canFall = true;
+        _isInputEnabled = true;
     }
 }

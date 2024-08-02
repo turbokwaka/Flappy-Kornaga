@@ -11,11 +11,11 @@ public class PlayerCollision : MonoBehaviour
     public static event DeathEventHandler OnDeath;
 
     // OnPickupCoin EVENT
-    public delegate void CoinPickupEventHandler();
+    public delegate void CoinPickupEventHandler(int coins);
     public static event CoinPickupEventHandler OnPickupCoin;
 
     // OnAddScore EVENT
-    public delegate void ScoreAddEventHandler();
+    public delegate void ScoreAddEventHandler(int score);
     public static event ScoreAddEventHandler OnAddScore;
 
     // --- Update Method ---
@@ -38,26 +38,28 @@ public class PlayerCollision : MonoBehaviour
         {
             OnDeath();
             AudioManager.instance.PlaySFX(AudioManager.instance.deathSound);
+            
             playerLogic._isDead = true;
+            playerLogic._isInputEnabled = false;
         }
     }
 
     // --- PickupCoin Method ---
-    private void PickupCoin()
+    private void PickupCoin(int coins)
     {
         if (OnPickupCoin != null && playerLogic._isDead == false)
         {
-            OnPickupCoin();
+            OnPickupCoin(coins);
             AudioManager.instance.PlaySFX(AudioManager.instance.coinSound);
         }
     }
 
     // --- AddScore Method ---
-    private void AddScore()
+    private void AddScore(int score)
     {
         if (OnAddScore != null && playerLogic._isDead == false)
         {
-            OnAddScore();
+            OnAddScore(score);
         }
     }
     
@@ -74,7 +76,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Coin"))
         {
-            PickupCoin();
+            PickupCoin(1);
             Destroy(other.gameObject);
         }
     }
@@ -83,7 +85,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PipeTrigger"))
         {
-            AddScore();
+            AddScore(1);
         }
     }
 }

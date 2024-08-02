@@ -38,6 +38,8 @@ public class GameLogic : MonoBehaviour
     void OnEnable()
     {
         PlayerCollision.OnDeath += HandlePlayerDeath;
+        PlayerCollision.OnPickupCoin += AddCoins;
+        PlayerCollision.OnAddScore += AddScore;
     }
 
     void OnDisable()
@@ -51,7 +53,7 @@ public class GameLogic : MonoBehaviour
         UpdateHighestScore();
     }
     
-    public void AddScore(int amount)
+    void AddScore(int amount)
     {
         if (!GameIsOver)
         {
@@ -60,7 +62,7 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    public void AddCoins(int amount)
+    private void AddCoins(int amount)
     {
         if (!GameIsOver)
         {
@@ -93,7 +95,6 @@ public class GameLogic : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayerPrefs.SetInt("PlayerCoins", _playerCoins);
         PlayerPrefs.Save();
     }
 }
