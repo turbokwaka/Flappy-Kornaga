@@ -31,4 +31,14 @@ public class PauseLogic : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenuScene");
     }
+
+    public void MuteSfx()
+    {
+        AudioManager.instance.MuteSfx();
+    }
+
+    public void MuteMusic()
+    {
+        AudioManager.instance.MuteMusic();
+    }
 }

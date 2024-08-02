@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +23,9 @@ public class GameLogic : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+            
         _playerLogic = playerObject.GetComponent<PlayerLogic>();
         
         _playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
@@ -29,6 +33,22 @@ public class GameLogic : MonoBehaviour
         
         coinsText.text = _playerCoins.ToString();
         highestScoreText.text = _playerHighestScore.ToString();
+    }
+    
+    void OnEnable()
+    {
+        PlayerLogic.OnDeath += HandlePlayerDeath;
+    }
+
+    void OnDisable()
+    {
+        PlayerLogic.OnDeath -= HandlePlayerDeath;
+    }
+
+    void HandlePlayerDeath()
+    {
+        gameOverScreen.SetActive(true);
+        UpdateHighestScore();
     }
     
     public void AddScore(int amount)
@@ -48,16 +68,6 @@ public class GameLogic : MonoBehaviour
             coinsText.text = _playerCoins.ToString();
             PlayerPrefs.SetInt("PlayerCoins", _playerCoins);
         }
-    }
-
-    public void GameOver()
-    {
-        GameIsOver = true;
-        gameOverScreen.SetActive(true);
-        
-        AudioManager.instance.PlaySFX(AudioManager.instance.deathSound);
-
-        UpdateHighestScore();
     }
 
     public void RestartGame()
