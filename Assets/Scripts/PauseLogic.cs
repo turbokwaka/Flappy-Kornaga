@@ -11,7 +11,7 @@ public class PauseLogic : MonoBehaviour
     
     public void Pause()
     {
-        var gameLogic = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameLogic>();
+        var gameLogic = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameManager>();
         
         if (!gameLogic.GameIsOver)
         {
@@ -34,7 +34,7 @@ public class PauseLogic : MonoBehaviour
 
     public void MuteSfx()
     {
-        AudioManager.instance.MuteSfx();
+        AudioManager.instance.MuteSFX();
     }
 
     public void MuteMusic()

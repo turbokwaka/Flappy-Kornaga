@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameLogic : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject playerObject;
@@ -19,14 +19,14 @@ public class GameLogic : MonoBehaviour
 
     public bool GameIsOver = false;
 
-    private PlayerLogic _playerLogic;
+    private PlayerManager playerManager;
 
     void Start()
     {
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
             
-        _playerLogic = playerObject.GetComponent<PlayerLogic>();
+        playerManager = playerObject.GetComponent<PlayerManager>();
         
         _playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
         _playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);

@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerCollision : MonoBehaviour
 {
-    [SerializeField] private PlayerLogic playerLogic;
+    [SerializeField] private PlayerManager playerManager;
     
     // --- Events ---
     // OnDeath EVENT
@@ -24,7 +25,7 @@ public class PlayerCollision : MonoBehaviour
         // Check if the player goes out of screen bounds
         if (transform.position.y is > 7 or < -7)
         {
-            if (playerLogic._isDead == false)
+            if (playerManager._isDead == false)
             {
                 Die();
             }
@@ -34,30 +35,30 @@ public class PlayerCollision : MonoBehaviour
     // --- Die Method ---
     private void Die()
     {
-        if (OnDeath != null && playerLogic._isDead == false)
+        if (OnDeath != null && playerManager._isDead == false)
         {
             OnDeath();
-            AudioManager.instance.PlaySFX(AudioManager.instance.deathSound);
+            AudioManager.instance.Play("deathSound");
             
-            playerLogic._isDead = true;
-            playerLogic._isInputEnabled = false;
+            playerManager._isDead = true;
+            playerManager._isInputEnabled = false;
         }
     }
 
     // --- PickupCoin Method ---
     private void PickupCoin(int coins)
     {
-        if (OnPickupCoin != null && playerLogic._isDead == false)
+        if (OnPickupCoin != null && playerManager._isDead == false)
         {
             OnPickupCoin(coins);
-            AudioManager.instance.PlaySFX(AudioManager.instance.coinSound);
+            AudioManager.instance.Play("coinSound");
         }
     }
 
     // --- AddScore Method ---
     private void AddScore(int score)
     {
-        if (OnAddScore != null && playerLogic._isDead == false)
+        if (OnAddScore != null && playerManager._isDead == false)
         {
             OnAddScore(score);
         }

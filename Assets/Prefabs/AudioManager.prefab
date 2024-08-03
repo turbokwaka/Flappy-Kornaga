@@ -265,7 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8215185284373441283}
-  - component: {fileID: 5568352164337891032}
+  - component: {fileID: 3805607838468501883}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Audio
@@ -290,7 +290,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5568352164337891032
+--- !u!114 &3805607838468501883
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -302,10 +302,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca28df34a4a42cf479bda0c830880ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundMusic: {fileID: 8215185283661140367}
-  SFX: {fileID: 8215185284265907363}
-  music: {fileID: 8300000, guid: d70dfbaf8b899ee4eaac176430a48d17, type: 3}
-  buttonSound: {fileID: 8300000, guid: 9f4aa1e54eb7d1347a84678a241e7e83, type: 3}
-  jumpSound: {fileID: 8300000, guid: f89e5ac6c2b62744589ff5736c1f7c88, type: 3}
-  coinSound: {fileID: 8300000, guid: 18b1dc8f2f9c938459c6a819964b7f8f, type: 3}
-  deathSound: {fileID: 8300000, guid: c4069d820639edc42bdabd5a4948377b, type: 3}
+  sounds:
+  - name: theme
+    clip: {fileID: 8300000, guid: d70dfbaf8b899ee4eaac176430a48d17, type: 3}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+  - name: jumpSound
+    clip: {fileID: 8300000, guid: f89e5ac6c2b62744589ff5736c1f7c88, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: deathSound
+    clip: {fileID: 8300000, guid: c4069d820639edc42bdabd5a4948377b, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: coinSound
+    clip: {fileID: 8300000, guid: 18b1dc8f2f9c938459c6a819964b7f8f, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: buttonSound
+    clip: {fileID: 8300000, guid: 9f4aa1e54eb7d1347a84678a241e7e83, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
