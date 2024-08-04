@@ -1,100 +1,125 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverScreen;
-    [SerializeField] private GameObject playerObject;
+    public static GameManager instance;
+
+    // --- Player stats ---
+    public int playerScore;
+    public int playerHighestScore;
+    public int playerCoins;
+
+    // --- Game state ---
+    public bool GameIsOver;
     
-    [Header("-------Text Objects-------")]
-    [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private TMP_Text coinsText;
-    [SerializeField] private TMP_Text highestScoreText;
+    // --- OnChangeHighestScore EVENT ---
+    public delegate void ChangeHighestScoreEventHandler(int newHighestScore);
+    public static event ChangeHighestScoreEventHandler OnChangeHS;
 
-    private int _playerScore;
-    private int _playerHighestScore;
-    private int _playerCoins;
-
-    public bool GameIsOver = false;
-
-    private PlayerManager playerManager;
-
-    void Start()
+    private void Awake()
     {
+        if (instance == null)
+        {
+            // Initiate singleton
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            
+            // Load player stats
+            playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
+            playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
+            
+            // Initialize game state
+            GameIsOver = false;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        // Set target frame rate and VSync settings
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
-            
-        playerManager = playerObject.GetComponent<PlayerManager>();
-        
-        _playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
-        _playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
-        
-        coinsText.text = _playerCoins.ToString();
-        highestScoreText.text = _playerHighestScore.ToString();
     }
-    
-    void OnEnable()
+
+    private void OnEnable()
     {
+        // Subscribe to events
         PlayerCollision.OnDeath += HandlePlayerDeath;
         PlayerCollision.OnPickupCoin += AddCoins;
-        PlayerCollision.OnAddScore += AddScore;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
+        // Unsubscribe from events
         PlayerCollision.OnDeath -= HandlePlayerDeath;
-    }
-
-    void HandlePlayerDeath()
-    {
-        gameOverScreen.SetActive(true);
-        UpdateHighestScore();
+        PlayerCollision.OnPickupCoin -= AddCoins;
     }
     
-    void AddScore(int amount)
+    public void PauseGame() {
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame()
     {
-        if (!GameIsOver)
-        {
-            _playerScore += amount;
-            scoreText.text = _playerScore.ToString();
-        }
+        StartCoroutine(ResumeGameWithDelay(3f));
+    }
+
+    private IEnumerator ResumeGameWithDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = 1;
+    }
+
+    private void HandlePlayerDeath()
+    {
+        GameIsOver = true;
+        HandleChangeHighestScore();
     }
 
     private void AddCoins(int amount)
     {
         if (!GameIsOver)
         {
-            _playerCoins += amount;
-            coinsText.text = _playerCoins.ToString();
-            PlayerPrefs.SetInt("PlayerCoins", _playerCoins);
+            playerCoins += amount;
+            PlayerPrefs.SetInt("PlayerCoins", playerCoins);
+        }
+    }
+    
+    private void HandleChangeHighestScore()
+    {
+        if (playerScore > playerHighestScore)
+        {
+            playerHighestScore = playerScore;
+            PlayerPrefs.SetInt("PlayerHighestScore", playerHighestScore);
+            
+            OnChangeHS?.Invoke(playerHighestScore);
         }
     }
 
     public void RestartGame()
     {
+        // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    private void UpdateHighestScore()
-    {
-        if (_playerScore > _playerHighestScore)
-        {
-            _playerHighestScore = _playerScore;
-            highestScoreText.text = _playerHighestScore.ToString();
-
-            PlayerPrefs.SetInt("PlayerHighestScore", _playerHighestScore);
-        }
     }
 
     public void MainMenu()
     {
+        // Load the main menu scene
         SceneManager.LoadScene("MainMenuScene");
     }
 
     private void OnApplicationQuit()
     {
+        // Save player preferences when the application quits
         PlayerPrefs.Save();
     }
 }

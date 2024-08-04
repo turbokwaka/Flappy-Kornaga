@@ -14,14 +14,11 @@ public class PlayerManager : MonoBehaviour
     public static event FallEventHandler OnFall;
     
     // --- private fields ---
-    private GameManager gameManager;
     internal bool _isInputEnabled = false;
     internal bool _isDead = false;
 
     void Start()
     {
-        gameManager = GameObject.FindGameObjectWithTag("Logic").GetComponent<GameManager>();
-
         physics.gravityScale = 0;
         
         StartCoroutine(StartFalling());
