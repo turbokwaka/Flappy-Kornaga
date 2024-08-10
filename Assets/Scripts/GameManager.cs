@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public int playerCoins;
 
     // --- Game state ---
-    public bool GameIsOver;
+    public bool GameIsOver = false;
     
     // --- OnChangeHighestScore EVENT ---
     public delegate void ChangeHighestScoreEventHandler(int newHighestScore);
@@ -25,36 +25,31 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
-            // Initiate singleton
+        { 
             instance = this;
-            DontDestroyOnLoad(gameObject);
-            
-            // Load player stats
-            playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
-            playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
-            
-            // Initialize game state
-            GameIsOver = false;
         }
         else
         {
             Destroy(gameObject);
         }
+        
+        DontDestroyOnLoad(gameObject);
     }
-
-    private void Start()
-    {
-        // Set target frame rate and VSync settings
-        Application.targetFrameRate = 60;
-        QualitySettings.vSyncCount = 0;
-    }
-
+    
     private void OnEnable()
     {
+        // Load game data
+        playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
+        playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
+        GameIsOver = false;
+        
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+        
         // Subscribe to events
         PlayerCollision.OnDeath += HandlePlayerDeath;
         PlayerCollision.OnPickupCoin += AddCoins;
+        PlayerCollision.OnAddScore += AddScore;
     }
 
     private void OnDisable()
@@ -62,6 +57,7 @@ public class GameManager : MonoBehaviour
         // Unsubscribe from events
         PlayerCollision.OnDeath -= HandlePlayerDeath;
         PlayerCollision.OnPickupCoin -= AddCoins;
+        PlayerCollision.OnAddScore -= AddScore;
     }
     
     public void PauseGame() {
@@ -93,6 +89,14 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("PlayerCoins", playerCoins);
         }
     }
+
+    private void AddScore(int amount)
+    {
+        if (!GameIsOver)
+        {
+            playerScore += amount;
+        }
+    }
     
     private void HandleChangeHighestScore()
     {
@@ -107,6 +111,8 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        GameIsOver = false;
+        
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

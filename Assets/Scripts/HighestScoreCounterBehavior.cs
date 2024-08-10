@@ -22,7 +22,7 @@ public class HighestScoreCounterBehavior : MonoBehaviour
 
     void OnDisable()
     {
-        PlayerCollision.OnAddScore -= HandleChangeHS;
+        GameManager.OnChangeHS -= HandleChangeHS;
     }
     
     void HandleChangeHS(int score)

@@ -23,24 +23,20 @@ public class PlayerCollision : MonoBehaviour
     private void Update()
     {
         // Check if the player goes out of screen bounds
-        if (transform.position.y is > 7 or < -7)
+        if (transform.position.y is > 7 or < -7 && playerManager._isInputEnabled)
         {
-            if (playerManager._isDead == false)
-            {
-                Die();
-            }
+            Die();
         }
     }
 
     // --- Die Method ---
     private void Die()
     {
-        if (OnDeath != null && playerManager._isDead == false)
+        if (OnDeath != null && GameManager.instance.GameIsOver == false)
         {
             OnDeath();
             AudioManager.instance.Play("deathSound");
             
-            playerManager._isDead = true;
             playerManager._isInputEnabled = false;
         }
     }
@@ -48,7 +44,7 @@ public class PlayerCollision : MonoBehaviour
     // --- PickupCoin Method ---
     private void PickupCoin(int coins)
     {
-        if (OnPickupCoin != null && playerManager._isDead == false)
+        if (OnPickupCoin != null && GameManager.instance.GameIsOver == false)
         {
             OnPickupCoin(coins);
             AudioManager.instance.Play("coinSound");
@@ -58,7 +54,7 @@ public class PlayerCollision : MonoBehaviour
     // --- AddScore Method ---
     private void AddScore(int score)
     {
-        if (OnAddScore != null && playerManager._isDead == false)
+        if (OnAddScore != null && GameManager.instance.GameIsOver == false)
         {
             OnAddScore(score);
         }
@@ -67,7 +63,7 @@ public class PlayerCollision : MonoBehaviour
     // --- Collision check ---
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Obstacle"))
+        if (other.gameObject.CompareTag("Obstacle") && GameManager.instance.GameIsOver == false)
         {
             Die();
         }

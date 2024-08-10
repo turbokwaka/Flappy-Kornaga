@@ -1,24 +1,20 @@
+using System;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
-
     [SerializeField] private GameObject deathScreen;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject hud;
-
-    private void Awake()
+    
+    private void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        PlayerCollision.OnDeath += ShowDeathScreen;
+    }
+
+    private void OnDisable()
+    {
+        PlayerCollision.OnDeath -= ShowDeathScreen;
     }
 
     public void ShowPauseMenu()

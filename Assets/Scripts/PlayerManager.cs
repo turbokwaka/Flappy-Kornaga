@@ -15,7 +15,6 @@ public class PlayerManager : MonoBehaviour
     
     // --- private fields ---
     internal bool _isInputEnabled = false;
-    internal bool _isDead = false;
 
     void Start()
     {
