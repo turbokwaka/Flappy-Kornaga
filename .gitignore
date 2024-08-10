@@ -60,6 +60,4 @@ sysinfo.txt
 # Optional: Ignore TextMesh Pro Fonts and Sprites (if not used)
 [Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/
 [Aa]ssets/TextMesh Pro/Resources/Sprite Assets/
-
-# Ignore other irrelevant files
-# Add additional files and folders to ignore as needed
+[Aa]ssets/TextMesh Pro/Shaders/
