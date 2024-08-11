@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -120,6 +119,8 @@ public class GameManager : MonoBehaviour
     public void MainMenu()
     {
         // Load the main menu scene
+        GameIsOver = false;
+        
         SceneManager.LoadScene("MainMenuScene");
     }
 
