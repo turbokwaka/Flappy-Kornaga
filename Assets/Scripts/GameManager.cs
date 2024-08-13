@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    
     // --- Player stats ---
     public int playerScore;
     public int playerHighestScore;
@@ -16,10 +16,18 @@ public class GameManager : MonoBehaviour
 
     // --- Game state ---
     public bool GameIsOver = false;
+    public bool GameIsPaused = false;
     
     // --- OnChangeHighestScore EVENT ---
     public delegate void ChangeHighestScoreEventHandler(int newHighestScore);
     public static event ChangeHighestScoreEventHandler OnChangeHS;
+
+    public delegate void PauseEventHandler();
+    public static event PauseEventHandler OnPause;
+    
+    public delegate void ContinueEventHandler();
+
+    public static event ContinueEventHandler OnContinue;
 
     private void Awake()
     {
@@ -59,13 +67,16 @@ public class GameManager : MonoBehaviour
         PlayerCollision.OnAddScore -= AddScore;
     }
     
-    public void PauseGame() {
-        Time.timeScale = 0;
+    public void PauseGame()
+    {
+        OnPause();
     }
 
     public void ResumeGame()
     {
         StartCoroutine(ResumeGameWithDelay(3f));
+
+        OnContinue();
     }
 
     private IEnumerator ResumeGameWithDelay(float delay)
@@ -108,25 +119,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void RestartGame()
+    public void ResetLevelState()
     {
-        GameIsOver = false;
-        
-        // Reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        OnEnable();
     }
 
-    public void MainMenu()
+    public void QuitApplication()
     {
-        // Load the main menu scene
-        GameIsOver = false;
-        
-        SceneManager.LoadScene("MainMenuScene");
-    }
-
-    private void OnApplicationQuit()
-    {
-        // Save player preferences when the application quits
         PlayerPrefs.Save();
+        Application.Quit();
     }
 }

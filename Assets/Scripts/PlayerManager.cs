@@ -8,19 +8,32 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Rigidbody2D physics;
     [SerializeField] private float jumpStrength;
     [SerializeField] private float gravityScale;
-    
+
     // --- OnFly EVENT ---
     public delegate void FallEventHandler();
     public static event FallEventHandler OnFall;
-    
+
     // --- private fields ---
     internal bool _isInputEnabled = false;
+    private Coroutine fallCoroutine;
+    private Vector2 savedVelocity;
 
     void Start()
     {
         physics.gravityScale = 0;
-        
-        StartCoroutine(StartFalling());
+        fallCoroutine = StartCoroutine(StartFalling());
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnPause += HandlePause;
+        GameManager.OnContinue += HandleContinue;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnPause -= HandlePause;
+        GameManager.OnContinue -= HandleContinue;
     }
 
     void Update()
@@ -44,5 +57,29 @@ public class PlayerManager : MonoBehaviour
 
         physics.gravityScale = gravityScale;
         _isInputEnabled = true;
+    }
+
+    private void HandlePause()
+    {
+        if (fallCoroutine != null)
+        {
+            StopCoroutine(fallCoroutine);
+            fallCoroutine = null;
+        }
+
+        savedVelocity = physics.velocity;
+        physics.velocity = Vector2.zero;
+        physics.gravityScale = 0;
+    }
+
+    private void HandleContinue()
+    {
+        physics.velocity = savedVelocity;
+        physics.gravityScale = gravityScale;
+
+        if (fallCoroutine == null)
+        {
+            fallCoroutine = StartCoroutine(StartFalling());
+        }
     }
 }

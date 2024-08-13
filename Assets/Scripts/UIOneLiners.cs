@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class UIOneLiners : MonoBehaviour
 {
-    public void RestartGame()
+    public void LoadLevel(string name)
     {
-        GameManager.instance.RestartGame();
+        GameManager.instance.ResetLevelState();
+        LevelLoader.instance.LoadLevel(name);
     }
-
     public void ResumeGame()
     {
         GameManager.instance.ResumeGame();
@@ -19,9 +19,9 @@ public class UIOneLiners : MonoBehaviour
         GameManager.instance.PauseGame();
     }
 
-    public void MainMenu()
+    public void QuitApplication()
     {
-        GameManager.instance.MainMenu();
+        GameManager.instance.QuitApplication();
     }
 
     public void MuteSfx()
