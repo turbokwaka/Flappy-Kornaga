@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    
     // --- Player stats ---
     public int playerScore;
     public int playerHighestScore;
@@ -17,35 +17,37 @@ public class GameManager : MonoBehaviour
     // --- Game state ---
     public bool GameIsOver = false;
     
-    // --- OnChangeHighestScore EVENT ---
+    // --- Events ---
     public delegate void ChangeHighestScoreEventHandler(int newHighestScore);
     public static event ChangeHighestScoreEventHandler OnChangeHS;
 
-    private void Awake()
+    public delegate void PauseEventHandler();
+    public static event PauseEventHandler OnPause;
+    
+    public delegate void ContinueEventHandler();
+
+    public static event ContinueEventHandler OnContinue;
+
+        private void Awake()
     {
         if (instance == null)
         { 
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        
-        DontDestroyOnLoad(gameObject);
     }
-    
+
     private void OnEnable()
     {
-        // Load game data
-        playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
-        playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
-        GameIsOver = false;
+        ResetLevelState();
         
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         
-        // Subscribe to events
         PlayerCollision.OnDeath += HandlePlayerDeath;
         PlayerCollision.OnPickupCoin += AddCoins;
         PlayerCollision.OnAddScore += AddScore;
@@ -53,29 +55,33 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // Unsubscribe from events
         PlayerCollision.OnDeath -= HandlePlayerDeath;
         PlayerCollision.OnPickupCoin -= AddCoins;
         PlayerCollision.OnAddScore -= AddScore;
     }
     
-    public void PauseGame() {
-        Time.timeScale = 0;
+    public void PauseGame()
+    {
+        OnPause();
     }
 
     public void ResumeGame()
     {
-        StartCoroutine(ResumeGameWithDelay(3f));
+        OnContinue();
     }
 
     private IEnumerator ResumeGameWithDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
-        Time.timeScale = 1;
     }
 
     private void HandlePlayerDeath()
     {
+        Debug.Log($" Game over?: {GameIsOver}," +
+                  $" Coins: {playerCoins}," +
+                  $" Score: {playerScore}," +
+                  $" High Score: {playerHighestScore}");
+            
         GameIsOver = true;
         HandleChangeHighestScore();
     }
@@ -103,30 +109,25 @@ public class GameManager : MonoBehaviour
         {
             playerHighestScore = playerScore;
             PlayerPrefs.SetInt("PlayerHighestScore", playerHighestScore);
-            
+            PlayerPrefs.Save();
+        
             OnChangeHS?.Invoke(playerHighestScore);
         }
     }
 
-    public void RestartGame()
+    public void ResetLevelState()
     {
         GameIsOver = false;
+        playerScore = 0;
+        playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
+        playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
         
-        // Reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void MainMenu()
-    {
-        // Load the main menu scene
-        GameIsOver = false;
-        
-        SceneManager.LoadScene("MainMenuScene");
-    }
-
-    private void OnApplicationQuit()
-    {
-        // Save player preferences when the application quits
         PlayerPrefs.Save();
+    }
+
+    public void QuitApplication()
+    {
+        PlayerPrefs.Save();
+        Application.Quit();
     }
 }

@@ -60,7 +60,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        s.source.Play();
+            s.source.Play();
     }
 
     public void Stop(string name)

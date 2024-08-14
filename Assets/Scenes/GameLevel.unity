@@ -930,14 +930,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 434738611}
         m_TargetAssemblyTypeName: UIOneLiners, Assembly-CSharp
-        m_MethodName: MainMenu
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenuLevel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &424485578
@@ -1076,7 +1076,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: -1559014619
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &434738605
 RectTransform:
@@ -1337,6 +1337,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458220039}
   m_CullTransparentMesh: 1
+--- !u!95 &518012500 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6632738577524248657, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
+  m_PrefabInstance: {fileID: 3939112628183832130}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,28 +1510,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 434738610}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowHud
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 434738611}
         m_TargetAssemblyTypeName: UIOneLiners, Assembly-CSharp
-        m_MethodName: RestartGame
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: GameLevel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &651489932
@@ -2018,6 +2011,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858510733}
   m_CullTransparentMesh: 1
+--- !u!1 &912870062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6632738578148374818, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
+  m_PrefabInstance: {fileID: 3939112628183832130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &912870064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912870062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b88cd0ac8154f6b9472a8ce191e973e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transition: {fileID: 518012500}
 --- !u!1 &974472014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,7 +2196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3177,14 +3188,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 434738611}
         m_TargetAssemblyTypeName: UIOneLiners, Assembly-CSharp
-        m_MethodName: MainMenu
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenuLevel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1747273579
@@ -4051,5 +4062,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6632738577524248656, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632738577524248657, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632738577584333709, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5045811971928811342, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 68d751a5416f6cf44a68c36a603ba7d9, type: 3}
