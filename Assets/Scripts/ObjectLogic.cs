@@ -22,11 +22,8 @@ public class ObjectLogic : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.instance.GameIsPaused == false)
-        {
-            var movement = new Vector3(-_speed, 0, 0);
-            transform.position += movement * Time.deltaTime;
-        }
+        var movement = new Vector3(-_speed, 0, 0);
+        transform.position += movement * Time.deltaTime;
         
         if (transform.position.x < _deadZone)
         {

@@ -38,11 +38,11 @@ public class Spawner : MonoBehaviour
     {
         while (true)
         {
-            SpawnPipe();
-
             // Randomize spawn rate and wait for the next spawn
             float _spawnRate = Random.Range(spawnRate - 0.5f, spawnRate + 0.5f);
             yield return new WaitForSeconds(_spawnRate);
+            
+            SpawnPipe();
         }
     }
 

@@ -16,9 +16,8 @@ public class GameManager : MonoBehaviour
 
     // --- Game state ---
     public bool GameIsOver = false;
-    public bool GameIsPaused = false;
     
-    // --- OnChangeHighestScore EVENT ---
+    // --- Events ---
     public delegate void ChangeHighestScoreEventHandler(int newHighestScore);
     public static event ChangeHighestScoreEventHandler OnChangeHS;
 
@@ -29,31 +28,26 @@ public class GameManager : MonoBehaviour
 
     public static event ContinueEventHandler OnContinue;
 
-    private void Awake()
+        private void Awake()
     {
         if (instance == null)
         { 
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        
-        DontDestroyOnLoad(gameObject);
     }
-    
+
     private void OnEnable()
     {
-        // Load game data
-        playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
-        playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
-        GameIsOver = false;
+        ResetLevelState();
         
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
         
-        // Subscribe to events
         PlayerCollision.OnDeath += HandlePlayerDeath;
         PlayerCollision.OnPickupCoin += AddCoins;
         PlayerCollision.OnAddScore += AddScore;
@@ -61,7 +55,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // Unsubscribe from events
         PlayerCollision.OnDeath -= HandlePlayerDeath;
         PlayerCollision.OnPickupCoin -= AddCoins;
         PlayerCollision.OnAddScore -= AddScore;
@@ -74,19 +67,21 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        StartCoroutine(ResumeGameWithDelay(3f));
-
         OnContinue();
     }
 
     private IEnumerator ResumeGameWithDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
-        Time.timeScale = 1;
     }
 
     private void HandlePlayerDeath()
     {
+        Debug.Log($" Game over?: {GameIsOver}," +
+                  $" Coins: {playerCoins}," +
+                  $" Score: {playerScore}," +
+                  $" High Score: {playerHighestScore}");
+            
         GameIsOver = true;
         HandleChangeHighestScore();
     }
@@ -114,14 +109,20 @@ public class GameManager : MonoBehaviour
         {
             playerHighestScore = playerScore;
             PlayerPrefs.SetInt("PlayerHighestScore", playerHighestScore);
-            
+            PlayerPrefs.Save();
+        
             OnChangeHS?.Invoke(playerHighestScore);
         }
     }
 
     public void ResetLevelState()
     {
-        OnEnable();
+        GameIsOver = false;
+        playerScore = 0;
+        playerCoins = PlayerPrefs.GetInt("PlayerCoins", 0);
+        playerHighestScore = PlayerPrefs.GetInt("PlayerHighestScore", 0);
+        
+        PlayerPrefs.Save();
     }
 
     public void QuitApplication()

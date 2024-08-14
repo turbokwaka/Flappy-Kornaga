@@ -70,16 +70,18 @@ public class PlayerManager : MonoBehaviour
         savedVelocity = physics.velocity;
         physics.velocity = Vector2.zero;
         physics.gravityScale = 0;
+        _isInputEnabled = false;
     }
 
     private void HandleContinue()
     {
-        physics.velocity = savedVelocity;
-        physics.gravityScale = gravityScale;
-
         if (fallCoroutine == null)
         {
             fallCoroutine = StartCoroutine(StartFalling());
         }
+        
+        physics.velocity = savedVelocity;
+        physics.gravityScale = gravityScale;
+        _isInputEnabled = true;
     }
 }
