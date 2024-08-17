@@ -9,6 +9,8 @@ public class LevelLoader : MonoBehaviour
 
     [SerializeField] private Animator transition;
 
+    private Coroutine loadCoroutine = null;
+
     private void Awake()
     {
         if (instance == null)
@@ -20,10 +22,13 @@ public class LevelLoader : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     public void LoadLevel(string levelName)
     {
-        StartCoroutine(LoadLevelCoroutine(levelName));
+        if (loadCoroutine == null)
+        {
+            loadCoroutine = StartCoroutine(LoadLevelCoroutine(levelName));
+        }
     }
 
     private IEnumerator LoadLevelCoroutine(string levelName)
@@ -33,8 +38,11 @@ public class LevelLoader : MonoBehaviour
         yield return new WaitForSecondsRealtime(1);
 
         SceneManager.LoadScene(levelName);
-        
+
+        GameManager.instance.ResetLevelState();
+
         transition.SetTrigger("End");
 
+        loadCoroutine = null;
     }
 }

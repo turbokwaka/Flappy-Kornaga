@@ -25,16 +25,17 @@ public class PlayerCollision : MonoBehaviour
         // Check if the player goes out of screen bounds
         if (transform.position.y is > 7 or < -7 && playerManager._isInputEnabled)
         {
+            Debug.Log("Player crossed game borders");
             Die();
-        }
+        }    
     }
 
     // --- Die Method ---
     private void Die()
     {
-        if (OnDeath != null && GameManager.instance.GameIsOver == false)
+        if (GameManager.instance.GameIsOver == false)
         {
-            OnDeath();
+            OnDeath?.Invoke();
             AudioManager.instance.Play("deathSound");
             
             playerManager._isInputEnabled = false;
@@ -44,9 +45,9 @@ public class PlayerCollision : MonoBehaviour
     // --- PickupCoin Method ---
     private void PickupCoin(int coins)
     {
-        if (OnPickupCoin != null && GameManager.instance.GameIsOver == false)
+        if (GameManager.instance.GameIsOver == false)
         {
-            OnPickupCoin(coins);
+            OnPickupCoin?.Invoke(coins);
             AudioManager.instance.Play("coinSound");
         }
     }
@@ -54,9 +55,9 @@ public class PlayerCollision : MonoBehaviour
     // --- AddScore Method ---
     private void AddScore(int score)
     {
-        if (OnAddScore != null && GameManager.instance.GameIsOver == false)
+        if (GameManager.instance.GameIsOver == false)
         {
-            OnAddScore(score);
+            OnAddScore?.Invoke(score);
         }
     }
     
@@ -65,6 +66,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Obstacle") && GameManager.instance.GameIsOver == false)
         {
+            Debug.Log("Player touched an obstacle");
             Die();
         }
     }

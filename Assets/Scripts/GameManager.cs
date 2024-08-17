@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public static event ContinueEventHandler OnContinue;
 
-        private void Awake()
+    private void Awake()
     {
         if (instance == null)
         { 
@@ -77,13 +77,13 @@ public class GameManager : MonoBehaviour
 
     private void HandlePlayerDeath()
     {
+        GameIsOver = true;
+        HandleChangeHighestScore();
+        
         Debug.Log($" Game over?: {GameIsOver}," +
                   $" Coins: {playerCoins}," +
                   $" Score: {playerScore}," +
                   $" High Score: {playerHighestScore}");
-            
-        GameIsOver = true;
-        HandleChangeHighestScore();
     }
 
     private void AddCoins(int amount)

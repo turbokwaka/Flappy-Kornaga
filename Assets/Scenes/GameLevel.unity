@@ -2776,8 +2776,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1623535960}
-  - component: {fileID: 1623535959}
   - component: {fileID: 1623535958}
+  - component: {fileID: 1623535959}
   - component: {fileID: 1623535961}
   - component: {fileID: 1623535957}
   - component: {fileID: 1623535962}
@@ -3511,7 +3511,7 @@ GameObject:
   - component: {fileID: 1986109513}
   m_Layer: 5
   m_Name: PauseButton
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

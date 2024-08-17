@@ -6,7 +6,6 @@ public class UIOneLiners : MonoBehaviour
 {
     public void LoadLevel(string name)
     {
-        GameManager.instance.ResetLevelState();
         LevelLoader.instance.LoadLevel(name);
     }
     public void ResumeGame()

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -39,14 +41,46 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
         // INPUT
-        if (_isInputEnabled)
+        if (CheckInput())
         {
-            if (Input.GetButtonDown("Jump") || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            physics.velocity = new Vector2(physics.velocity.x, jumpStrength);
+            AudioManager.instance.Play("jumpSound");
+        }
+    }
+
+    private bool CheckInput()
+    {
+        if (!_isInputEnabled)
+            return false;
+
+        if (ClickedOnUi())
+            return false;
+        
+        // for pc debug
+        if (Input.GetButtonDown("Jump"))
+            return true;
+
+        if (Input.GetMouseButtonDown(0))
+            return true;
+
+        return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+    }
+    
+    private bool ClickedOnUi(){
+
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition;
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        // return results.Count > 0;
+        foreach (var item in results)
+        {
+            if (item.gameObject.CompareTag("UI"))
             {
-                physics.velocity = new Vector2(physics.velocity.x, jumpStrength);
-                AudioManager.instance.Play("jumpSound");
+                return true;
             }
         }
+        return false;
     }
 
     private IEnumerator StartFalling()
