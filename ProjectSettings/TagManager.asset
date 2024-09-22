@@ -10,6 +10,7 @@ TagManager:
   - PipeTrigger
   - Audio
   - UI
+  - ShopManager
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c2cd1ae9397d847ab442fca9fa7b24, type: 3}
+  m_Name: HatCollection
+  m_EditorClassIdentifier: 
+  Items:
+  - itemName: none
+    description: none
+    rarity: 
+    prefab: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 9e7673bd113806146bd6d71a527cb4b5, type: 3}
+  - itemName: cowboy
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: 583974f4c7351844dab5aec0f13cefbf, type: 3}
+    sprite: {fileID: 21300000, guid: b9603f9f084cafc4fb0de3fcf2217ff0, type: 3}
+  - itemName: wig
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: 1d96e47e076c7e0438085db9e0d210d9, type: 3}
+    sprite: {fileID: 21300000, guid: 2dac44cb929e4b046ad80016d4846310, type: 3}
+  - itemName: sunhat
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: 7c06df3e1d4db114fa0e9d9bfdcbce7a, type: 3}
+    sprite: {fileID: 21300000, guid: 5710bba253f773f48a947cde911e3f31, type: 3}
+  - itemName: santa
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: b3ec78e74add3b6408df06242c57f0ba, type: 3}
+    sprite: {fileID: 21300000, guid: 6f955f561c703214d917cbf06a092999, type: 3}
+  - itemName: shark
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: 74e247402c1782341bd51ff97a067416, type: 3}
+    sprite: {fileID: 21300000, guid: 8919fb6fdc56537469445fd6e15bc7cf, type: 3}
+  - itemName: turkish
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: dcf5a64279b186544aad5b156597068e, type: 3}
+    sprite: {fileID: 21300000, guid: 2f12488ab614a2d429ed8450eeae533d, type: 3}
+  - itemName: crown
+    description: cool hat really cool
+    rarity: 
+    prefab: {fileID: 348978783064632057, guid: cdf61a58c9bdcbc4886d3f4096700ed3, type: 3}
+    sprite: {fileID: 21300000, guid: 3105ecce0ff9acc4ca416fd2d8175900, type: 3}
+  Inventory:
+  - crown
+  - santa
+  - santa
+  - santa
+  - santa
+  equippedItemName: santa
